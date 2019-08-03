@@ -1,14 +1,21 @@
 package kata.taminglegacycode.tlc2;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ARMDispatcher {
 
-    public void populate(HttpServletRequest request, String pageStateName, Map<String, String> marketBindings) {
-        String[] values = request.getParameterValues(pageStateName);
-        if (values != null && values.length > 0) {
-            marketBindings.put(pageStateName + getDateStamp(), values[0]);
+    public void execute(HttpServletRequest httpServletRequest) {
+        Map<String, String> marketBindings = new HashMap<>();
+        String pageStateName = "normal";
+        populate(new ServletParameterSource(httpServletRequest), pageStateName, marketBindings);
+    }
+
+    public void populate(ParameterSource source, String pageStateName, Map<String, String> marketBindings) {
+        String value = source.getParameterForName(pageStateName);
+        if (value != null) {
+            marketBindings.put(pageStateName + getDateStamp(), value);
         }
     }
 
